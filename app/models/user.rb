@@ -8,4 +8,14 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :firstname, :lastname, :role, presence: true
+
+  enum role: {
+    buyer: 'buyer',
+    seller: 'seller'
+  }
+
+  after_initialize do
+    self.role ||= :buyer if self.new_record?
+  end
+
 end

@@ -24,9 +24,10 @@
                 autofocus: true,
                 input_html: { autocomplete: "lastname" }%>
     <%= f.input :role,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "seller or buyer" }%>
+            as: :select,
+            collection: User.roles.keys.map { |r| [r.titleize, r] },
+            required: true %>
+
   </div>
 
   <div class="form-actions">

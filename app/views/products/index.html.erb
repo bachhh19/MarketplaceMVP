@@ -1,2 +1,30 @@
-<h1>Products#index</h1>
-<p>Find me in app/views/products/index.html.erb</p>
+<h1 style="text-align: center; margin-bottom: 30px;">Nos produits</h1>
+
+<div class="products-grid">
+  <% @products.each do |product| %>
+    <div class="product-card">
+      <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image">
+
+      <div class="product-info">
+        <h2><%= link_to product.name, product_path(product) %></h2>
+        <p><%= truncate(product.description, length: 100) %></p>
+        <p><strong><%= number_to_currency(product.price) %></strong></p>
+
+        <% if current_user&.buyer? %>
+          <%= button_to "Ajouter au panier", items_path(product_id: product.id), method: :post, class: "btn" %>
+        <% end %>
+
+        <% if current_user&.seller? %>
+          <%= link_to "Modifier", edit_product_path(product), class: "btn btn-secondary" %>
+          <%= link_to "Supprimer", product_path(product), method: :delete, data: { confirm: "Es-tu sûr ?" }, class: "btn btn-danger" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if current_user&.seller? %>
+  <div style="text-align: center; margin-top: 30px;">
+    <%= link_to "Créer un produit", new_product_path, class: "btn btn-primary" %>
+  </div>
+<% end %>
