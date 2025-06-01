@@ -3,7 +3,7 @@ class CartsController < ApplicationController
   before_action :set_cart
 
   def show
-    @cart = Cart.find(params[:id])
+    @cart = current_user.cart || current_user.create_cart
   end
 
   def create
@@ -19,6 +19,6 @@ class CartsController < ApplicationController
   private
 
   def set_cart
-    @cart = current_user.carts || current_user.create_cart
+    @cart = current_user.cart || current_user.create_cart
   end
 end
