@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!
   before_action :only_seller!, only: [:new, :create, :edit, :update, :destroy]
-
+  before_action :set_product, only: [:edit, :update, :show, :destroy]
 
   def index
     @products = Product.all
@@ -16,7 +16,7 @@ class ProductsController < ApplicationController
   end
 
   def create
-    @product = Product.new(product_params)
+    @product = current_user.products.new(product_params)
     if @product.save
       redirect_to @product, notice: 'Produit créé avec succès.'
     else
@@ -25,6 +25,7 @@ class ProductsController < ApplicationController
   end
 
   def edit
+    @product = Product.find(params[:id])
   end
 
   def update
@@ -51,6 +52,6 @@ class ProductsController < ApplicationController
   end
 
   def product_params
-    params.require(:product).permit(:name, :description, :price)
+    params.require(:product).permit(:name, :image_url, :description, :price)
   end
 end

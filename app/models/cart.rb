@@ -9,4 +9,8 @@ class Cart < ApplicationRecord
   def total_items_count
     items.sum { |item| item.quantity.to_i }
   end
+
+  STATUSES = %w[nouveau commande livre]
+
+  validates :status, inclusion: { in: STATUSES }
 end

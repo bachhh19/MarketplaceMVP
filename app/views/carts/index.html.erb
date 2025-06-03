@@ -1,0 +1,18 @@
+<h2>Paniers commandés</h2>
+
+<% if @carts.any? %>
+  <% @carts.each do |cart| %>
+    <div class="card mb-3 p-3 border rounded bg-white">
+      <h5>Panier ##<%= cart.id %> - <%= cart.status.capitalize %></h5>
+      <ul>
+        <% cart.items.each do |item| %>
+          <li>
+            <strong><%= item.product.name %></strong> – <%= item.quantity %> × <%= number_to_currency(item.product.price, unit: "CHF") %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% else %>
+  <p>Aucun panier commandé.</p>
+<% end %>

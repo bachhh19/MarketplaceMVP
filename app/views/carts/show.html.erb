@@ -46,7 +46,7 @@
   <div class="mt-8 text-right max-w-5xl mx-auto">
     <p class="text-xl font-semibold">Total : <%= number_to_currency(@cart.total_price) %></p>
     <div class="mt-4 flex justify-end gap-4">
-      <%= button_tag "Commander", class: "btn" %>
+      <%= button_to "Commander", cart_path(@cart, cart: { status: "commande" }), method: :patch, class: "btn btn-primary" %>
       <%= button_to "Vider le panier", cart_path, method: :delete, data: { confirm: "Vider le panier ?" }, class: "btn btn-danger" %>
     </div>
   </div>

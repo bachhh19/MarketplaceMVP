@@ -5,11 +5,14 @@
     <% if user_signed_in? && current_user.seller? %>
       <%= link_to "Mes produits", products_path %>
       <%= link_to "Créer un produit", new_product_path %>
+      <%= link_to "Commandes", carts_path %>
+
     <% elsif user_signed_in? && current_user.buyer? %>
       <%= link_to "Boutique", products_path %>
 
       <% total_count = current_user.cart&.total_items_count || 0 %>
       <%= link_to "Mon panier (#{total_count})", cart_path %>
+      <%= link_to "Mes commandes", carts_path %>
     <% end %>
   </div>
 
