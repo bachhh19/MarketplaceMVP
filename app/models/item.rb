@@ -1,6 +1,8 @@
 class Item < ApplicationRecord
-  belongs_to :product
   belongs_to :cart
+  belongs_to :product
 
-  validates :product, :cart, presence: true
+  validates :cart, presence: true
+  validates :product, presence: true
+  validates :quantity, numericality: { greater_than: 0 }
 end

@@ -4,7 +4,11 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:edit, :update, :show, :destroy]
 
   def index
-    @products = Product.all
+    if current_user&.seller?
+      @products = Product.where(user_id: current_user.id)
+    else
+      @products = Product.all
+    end
   end
 
   def show

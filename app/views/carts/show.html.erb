@@ -1,55 +1,64 @@
 <% valid_items = @cart.items.select { |item| item.quantity.present? && item.quantity > 0 } %>
 
-<h1 class="text-2xl font-bold mb-6 text-center">Mon panier</h1>
+<h1>Mon panier</h1>
 
-<% if valid_items.any? %>
-  <div class="products-grid">
-    <% valid_items.each do |item| %>
-      <div class="product-card">
-        <% if item.product.image_url.present? %>
-          <%= image_tag item.product.image_url, alt: item.product.name, class: "product-image" %>
-        <% end %>
+<% if @cart.status == "new" %>
+  <% if valid_items.any? %>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+      <% valid_items.each do |item| %>
+        <div style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px;">
+          <% if item.product.image_url.present? %>
+            <%= image_tag item.product.image_url, alt: item.product.name, style: "width: 100%; height: auto;" %>
+          <% end %>
 
-        <div class="product-info">
-          <h2 class="text-lg font-semibold text-gray-800"><%= item.product.name %></h2>
-          <p class="text-sm text-gray-600">Quantité : <%= item.quantity %></p>
-          <p class="text-sm text-gray-600">Prix unitaire : <%= number_to_currency(item.product.price) %></p>
-        </div>
+          <div>
+            <h2><%= item.product.name %></h2>
+            <p>Quantité : <%= item.quantity %></p>
+            <p>Prix unitaire : <%= number_to_currency(item.product.price) %></p>
+          </div>
 
-        <div class="mt-4 flex flex-col items-center gap-2">
-          <div class="flex gap-2 items-center">
-
-            <%# Moins %>
+          <div style="display: flex; gap: 0.5rem; margin: 0.5rem 0;">
             <% if item.quantity > 1 %>
-              <%= form_with url: item_path(item), method: :patch, local: true do |form| %>
+              <%= form_with model: item, url: item_path(item), method: :patch, local: true do |form| %>
                 <%= form.hidden_field :quantity, value: item.quantity - 1 %>
-                <%= form.submit "-", class: "btn btn-secondary" %>
+                <%= form.submit "-", class: "btn" %>
               <% end %>
             <% end %>
 
-            <%# Plus %>
-            <%= form_with url: item_path(item), method: :patch, local: true do |form| %>
+            <%= form_with model: item, url: item_path(item), method: :patch, local: true do |form| %>
               <%= form.hidden_field :quantity, value: item.quantity + 1 %>
-              <%= form.submit "+", class: "btn btn-secondary" %>
+              <%= form.submit "+", class: "btn" %>
             <% end %>
           </div>
 
-          <%# Supprimer %>
-          <%= form_with url: item_path(item), method: :delete, data: { confirm: "Supprimer cet article ?" }, local: true do |form| %>
-            <%= form.submit "Supprimer", class: "btn btn-danger" %>
-          <% end %>
+          <div>
+            <%= button_to "Supprimer", item_path(item), method: :delete, data: { confirm: "Supprimer cet article ?" }, class: "btn btn-danger" %>
+          </div>
         </div>
-      </div>
-    <% end %>
-  </div>
-
-  <div class="mt-8 text-right max-w-5xl mx-auto">
-    <p class="text-xl font-semibold">Total : <%= number_to_currency(@cart.total_price) %></p>
-    <div class="mt-4 flex justify-end gap-4">
-      <%= button_to "Commander", cart_path(@cart, cart: { status: "commande" }), method: :patch, class: "btn btn-primary" %>
-      <%= button_to "Vider le panier", cart_path, method: :delete, data: { confirm: "Vider le panier ?" }, class: "btn btn-danger" %>
+      <% end %>
     </div>
-  </div>
+
+    <div style="margin-top: 2rem;">
+      <p><strong>Total :</strong> <%= number_to_currency(@cart.total_price) %></p>
+      <div style="display: flex; gap: 1rem;">
+        <%= button_to "Commander",
+            cart_path(@cart),
+            method: :patch,
+            params: { cart: { status: "confirmed" } },
+            data: { confirm: "Confirmer la commande ?" },
+            class: "btn btn-primary"
+        %>
+        <%= button_to "Vider le panier",
+            cart_path(@cart),
+            method: :delete,
+            data: { confirm: "Vider le panier ?" },
+            class: "btn btn-warning"
+        %>
+      </div>
+    </div>
+  <% else %>
+    <p>Votre panier est vide.</p>
+  <% end %>
 <% else %>
-  <p class="text-gray-600 text-center">Votre panier est vide.</p>
+  <p>Votre panier est vide.</p>
 <% end %>

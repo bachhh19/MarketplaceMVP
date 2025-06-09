@@ -1,37 +1,41 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-# db/seeds.rb
+require 'faker'
 
-# db/seeds.rb
+puts "Suppression des données existantes..."
+Item.delete_all
+Cart.delete_all
+Product.delete_all
+User.delete_all
 
-# Créer un utilisateur vendeur
-seller = User.find_or_create_by!(email: "seller@example.com") do |user|
-  user.password = "password"
-  user.password_confirmation = "password"
-  user.firstname = "seller"
-  user.lastname = "1"
-  user.role = "seller" if user.respond_to?(:role)  # si tu gères les rôles
+puts "Création des utilisateurs..."
+
+User.create!(
+  email: "seller@gmail.com",
+  password: "1234567",
+  role: "seller",
+  firstname: "Jean",
+  lastname: "Dupont"
+)
+
+User.create!(
+  email: "buyer@gmail.com",
+  password: "1234567",
+  role: "buyer",
+  firstname: "John",
+  lastname: "Doe"
+)
+
+puts "Création des produits..."
+
+User.where(role: "seller").each do |seller|
+  rand(2..5).times do
+    Product.create!(
+      user: seller,
+      name: Faker::Commerce.product_name,
+      description: Faker::Lorem.sentence(word_count: 10),
+      price: Faker::Commerce.price(range: 10..100.0),
+      image_url: Faker::LoremFlickr.image(size: "200x200", search_terms: ['product'])
+    )
+  end
 end
 
-# Vérifie que le seller est bien persisté
-raise "Erreur: le vendeur n'a pas été créé" unless seller.persisted?
-
-# Crée 10 produits pour ce vendeur
-10.times do |i|
-  Product.create!(
-    name: "Produit #{i + 1}",
-    image_url: "https://picsum.photos/200/200?random=#{i + 1}",
-    price: rand(10..100),
-    description: "Description du produit #{i + 1}",
-    user: seller
-  )
-end
-
-puts "✅ 1 vendeur créé et 10 produits associés."
+puts "Seed terminé !"

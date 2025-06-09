@@ -9,6 +9,7 @@
         <h2><%= link_to product.name, product_path(product) %></h2>
         <p><%= truncate(product.description, length: 100) %></p>
         <p><strong><%= number_to_currency(product.price) %></strong></p>
+        <p class="text-muted">Vendeur: <%= product.user.lastname %> <%= product.user.firstname %></p>
 
         <% if current_user&.buyer? %>
           <%= button_to "Ajouter au panier", items_path(product_id: product.id), method: :post, class: "btn" %>

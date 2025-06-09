@@ -2,15 +2,32 @@
 
 <% if @carts.any? %>
   <% @carts.each do |cart| %>
-    <div class="card mb-3 p-3 border rounded bg-white">
-      <h5>Panier ##<%= cart.id %> - <%= cart.status.capitalize %></h5>
-      <ul>
+    <div class="card mb-3 p-3 border rounded bg-white position-relative">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <h5>Panier ##<%= cart.id %></h5>
+        <small class="text-muted">Commandé le <%= l(cart.updated_at, format: :short) %></small>
+      </div>
+
+      <% if cart.status == "delivered" %>
+        <p class="text-green-600 font-semibold mt-1">
+          Livré le <%= l(cart.updated_at.to_date, format: :long) %>
+        </p>
+      <% end %>
+
+      <ul class="mt-2">
         <% cart.items.each do |item| %>
-          <li>
-            <strong><%= item.product.name %></strong> – <%= item.quantity %> × <%= number_to_currency(item.product.price, unit: "CHF") %>
-          </li>
+          <% if current_user.buyer? || item.product.user_id == current_user.id %>
+            <li>
+              <strong><%= item.product.name %></strong>
+              – <%= item.quantity %> × <%= number_to_currency(item.product.price, unit: "CHF") %>
+            </li>
+          <% end %>
         <% end %>
       </ul>
+
+      <% if current_user.seller? && cart.status == "confirmed" && cart.items.any? { |item| item.product.user_id == current_user.id } %>
+        <%= button_to "Marquer comme livré", mark_as_delivered_cart_path(cart), method: :patch, data: { confirm: "Confirmer la livraison ?" }, class: "btn btn-success mt-3" %>
+      <% end %>
     </div>
   <% end %>
 <% else %>

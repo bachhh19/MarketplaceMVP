@@ -10,8 +10,12 @@ Rails.application.routes.draw do
   resources :products
   resource :cart, only: [:show, :create, :update, :destroy]
   resources :items, only: [:create, :update, :destroy]
-  resources :carts, only: [:index]
-
+  resources :carts, only: [:index, :update]
+  resources :carts do
+    member do
+      patch :mark_as_delivered
+    end
+  end
 
   # Defines the root path route ("/")
   # root "posts#index"

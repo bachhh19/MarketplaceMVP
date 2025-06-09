@@ -10,7 +10,7 @@
     <% elsif user_signed_in? && current_user.buyer? %>
       <%= link_to "Boutique", products_path %>
 
-      <% total_count = current_user.cart&.total_items_count || 0 %>
+      <% total_count = current_user.current_cart.total_items_count || 0 %>
       <%= link_to "Mon panier (#{total_count})", cart_path %>
       <%= link_to "Mes commandes", carts_path %>
     <% end %>

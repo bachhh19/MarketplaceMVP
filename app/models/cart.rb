@@ -10,7 +10,7 @@ class Cart < ApplicationRecord
     items.sum { |item| item.quantity.to_i }
   end
 
-  STATUSES = %w[nouveau commande livre]
+  STATUSES = %w[new confirmed delivered]
 
   validates :status, inclusion: { in: STATUSES }
 end
