@@ -29,4 +29,9 @@ class User < ApplicationRecord
   def current_cart
     carts.find_or_create_by(status: 'new')
   end
+
+  def current_role
+    return "Acheteur" if self.role.capitalize == "Buyer"
+    return "Vendeur" if self.role.capitalize == "Seller"
+  end
 end

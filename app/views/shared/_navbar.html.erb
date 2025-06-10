@@ -19,7 +19,7 @@
   <div class="navbar-right">
     <% if user_signed_in? %>
       <span class="text-gray-500">
-        Connecté en tant que <strong><%= current_user.role.capitalize %></strong>
+        Connecté en tant que <strong><%= current_user.current_role %></strong>
       </span>
       <%= form_with url: destroy_user_session_path, method: :delete, class: "inline" do %>
         <%= submit_tag "Se déconnecter" %>
