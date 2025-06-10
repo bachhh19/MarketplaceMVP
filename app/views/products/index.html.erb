@@ -8,7 +8,7 @@
       <div class="product-info">
         <h2><%= link_to product.name, product_path(product) %></h2>
         <p><%= truncate(product.description, length: 100) %></p>
-        <p><strong><%= number_to_currency(product.price) %></strong></p>
+        <p><strong><%= number_to_currency(product.price, unit: "CHF ") %></strong></p>
         <p class="text-muted">Vendeur: <%= product.user.lastname %> <%= product.user.firstname %></p>
 
         <% if current_user&.buyer? %>
