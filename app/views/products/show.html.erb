@@ -1,28 +1,28 @@
-<div>
-  <div>
-    <img src="<%= @product.image_url %>" alt="<%= @product.name %>">
+<div class="product-show">
+  <div class="product-image-wrapper">
+    <img src="<%= @product.image_url %>" alt="<%= @product.name %>" class="product-image">
   </div>
 
-  <div>
-    <h1><%= @product.name %></h1>
+  <div class="product-details">
+    <h1 class="product-name"><%= @product.name %></h1>
 
-    <p class="text-muted">Vendeur: <%= @product.user.lastname %> <%= @product.user.firstname %></p>
+    <p class="product-seller">Vendeur : <%= @product.user.lastname %> <%= @product.user.firstname %></p>
 
-    <p><%= @product.description %></p>
+    <p class="product-description"><%= @product.description %></p>
 
-    <p><%= number_to_currency(@product.price) %></p>
+    <p class="product-price"><%= number_to_currency(@product.price, unit: "CHF ") %></p>
 
-    <div>
+    <div class="product-actions">
       <% if current_user&.buyer? %>
-          <%= button_to "Ajouter au panier", items_path(product_id: @product.id), method: :post, class: "btn" %>
+        <%= button_to "Ajouter au panier", items_path(product_id: @product.id), method: :post, class: "btn-add" %>
       <% end %>
 
       <% if current_user&.seller? %>
-        <%= link_to "Modifier", edit_product_path(@product) %>
-        <%= link_to "Supprimer", product_path(@product), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+        <%= link_to "Modifier", edit_product_path(@product), class: "btn-edit" %>
+        <%= link_to "Supprimer", product_path(@product), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn-delete" %>
       <% end %>
     </div>
 
-    <%= link_to "← Retour à la boutique", products_path %>
+    <%= link_to "← Retour à la boutique", products_path, class: "btn-back" %>
   </div>
 </div>

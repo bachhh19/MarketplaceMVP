@@ -14,7 +14,7 @@
           <div>
             <h2><%= item.product.name %></h2>
             <p>Quantité : <%= item.quantity %></p>
-            <p>Prix unitaire : <%= number_to_currency(item.product.price) %></p>
+            <p>Prix unitaire : <%= number_to_currency(item.product.price, unit: "CHF ") %></p>
           </div>
 
           <div style="display: flex; gap: 0.5rem; margin: 0.5rem 0;">
@@ -39,7 +39,7 @@
     </div>
 
     <div style="margin-top: 2rem;">
-      <p><strong>Total :</strong> <%= number_to_currency(@cart.total_price) %></p>
+      <p><strong>Total :</strong> <%= number_to_currency(@cart.total_price, unit: "CHF ") %></p>
       <div style="display: flex; gap: 1rem;">
         <%= button_to "Commander",
             cart_path(@cart),
