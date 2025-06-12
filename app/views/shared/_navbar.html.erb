@@ -1,6 +1,53 @@
+<style>
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: #fff;
+  }
+  .navbar .brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+  }
+  .navbar-left a,
+  .navbar-right a,
+  .navbar-right span {
+    margin-right: 1rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .navbar-left a:last-child,
+  .navbar-right a:last-child {
+    margin-right: 0;
+  }
+  .btn-logout {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    background: #fff;
+    color: #764ba2;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-logout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  }
+</style>
+
 <nav class="navbar">
   <div class="navbar-left">
+    
     <%= link_to "MyDogShop", root_path, class: "brand" %>
+
 
     <% if user_signed_in? && current_user.seller? %>
       <%= link_to "Mes produits", products_path %>
@@ -9,7 +56,6 @@
 
     <% elsif user_signed_in? && current_user.buyer? %>
       <%= link_to "Boutique", products_path %>
-
       <% total_count = current_user.current_cart.total_items_count || 0 %>
       <%= link_to "Mon panier (#{total_count})", cart_path %>
       <%= link_to "Mes commandes", carts_path %>
@@ -18,11 +64,13 @@
 
   <div class="navbar-right">
     <% if user_signed_in? %>
+
       <span class="text-gray-500">
         Connecté en tant que <strong><%= current_user.current_role %></strong>
+
       </span>
       <%= form_with url: destroy_user_session_path, method: :delete, class: "inline" do %>
-        <%= submit_tag "Se déconnecter" %>
+        <%= submit_tag "Se déconnecter", class: "btn-logout" %>
       <% end %>
     <% end %>
   </div>

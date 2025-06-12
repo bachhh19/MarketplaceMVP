@@ -1,35 +1,125 @@
-<h2>Paniers commandés</h2>
+<style>
+  /* ====== Section Title ====== */
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    color: #333;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
 
-<% if @carts.any? %>
-  <% @carts.each do |cart| %>
-    <div class="card mb-3 p-3 border rounded bg-white position-relative">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <h5>Panier ##<%= cart.id %></h5>
-        <small class="text-muted">Commandé le <%= l(cart.updated_at, format: :short) %></small>
-      </div>
+  /* ====== Card Styles ====== */
+  .order-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .order-header h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+  .order-header .text-muted {
+    color: #888;
+    font-size: 0.875rem;
+  }
+  .order-status {
+    margin-top: 0.5rem;
+    font-weight: 600;
+  }
+  .status-delivered {
+    color: #16a34a; /* green-600 */
+  }
 
-      <% if cart.status == "delivered" %>
-        <p class="text-green-600 font-semibold mt-1">
-          Livré le <%= l(cart.updated_at.to_date, format: :long) %>
-        </p>
-      <% end %>
+  /* ====== Item List ====== */
+  .item-list {
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+    color: #555;
+  }
+  .item-list li {
+    margin-bottom: 0.5rem;
+  }
 
-      <ul class="mt-2">
-        <% cart.items.each do |item| %>
-          <% if current_user.buyer? || item.product.user_id == current_user.id %>
-            <li>
-              <strong><%= item.product.name %></strong>
-              – <%= item.quantity %> × <%= number_to_currency(item.product.price, unit: "CHF") %>
-            </li>
-          <% end %>
+  /* ====== Button ====== */
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-success {
+    background: linear-gradient(45deg, #10b981, #047857);
+    color: #fff;
+    margin-top: 1rem;
+  }
+  .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+  }
+</style>
+
+<section class="orders-section">
+  <h2 class="section-title">Paniers commandés</h2>
+
+  <% if @carts.any? %>
+    <% @carts.each do |cart| %>
+      <div class="order-card">
+        <div class="order-header">
+          <h5>Panier ##<%= cart.id %></h5>
+          <small class="text-muted">Commandé le <%= l(cart.updated_at, format: :short) %></small>
+        </div>
+
+        <% if cart.status == "delivered" %>
+          <p class="order-status status-delivered">Livré le <%= l(cart.updated_at.to_date, format: :long) %></p>
         <% end %>
-      </ul>
 
-      <% if current_user.seller? && cart.status == "confirmed" && cart.items.any? { |item| item.product.user_id == current_user.id } %>
-        <%= button_to "Marquer comme livré", mark_as_delivered_cart_path(cart), method: :patch, data: { confirm: "Confirmer la livraison ?" }, class: "btn btn-success mt-3" %>
-      <% end %>
-    </div>
+        <ul class="item-list">
+          <% cart.items.each do |item| %>
+            <% if current_user.buyer? || item.product.user_id == current_user.id %>
+              <li>
+                <strong><%= item.product.name %></strong>
+                – <%= item.quantity %> × <%= number_to_currency(item.product.price, unit: "CHF") %>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+
+        <% if current_user.seller? && cart.status == "confirmed" && cart.items.any? { |item| item.product.user_id == current_user.id } %>
+          <%= button_to "Marquer comme livré",
+                        mark_as_delivered_cart_path(cart),
+                        method: :patch,
+                        data: { confirm: "Confirmer la livraison ?" },
+                        class: "btn btn-success" %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="text-center text-gray-600">Aucun panier commandé.</p>
   <% end %>
-<% else %>
-  <p>Aucun panier commandé.</p>
-<% end %>
+</section>

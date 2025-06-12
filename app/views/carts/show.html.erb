@@ -1,64 +1,171 @@
-<% valid_items = @cart.items.select { |item| item.quantity.present? && item.quantity > 0 } %>
+<style>
+  /* ====== Section Title ====== */
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    color: #333;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
 
-<h1>Mon panier</h1>
+  /* ====== Grid & Card ====== */
+  .cart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 0 1rem 2rem;
+  }
+  .cart-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .cart-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
 
-<% if @cart.status == "new" %>
-  <% if valid_items.any? %>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
+  /* ====== Item Info ====== */
+  .item-info h2 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+    font-weight: 600;
+    color: #333;
+  }
+  .item-info p {
+    margin: 0.25rem 0;
+    color: #555;
+  }
+
+  /* ====== Quantity Controls ====== */
+  .quantity-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  /* ====== Buttons ====== */
+  .button-container {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+  }
+  .btn-primary {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+  }
+  .btn-danger {
+    background: linear-gradient(45deg, #e53e3e, #c53030);
+  }
+  .btn-warning {
+    background: linear-gradient(45deg, #ecc94b, #d69e2e);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+  }
+
+  /* ====== Cart Summary ====== */
+  .cart-summary {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: right;
+    padding: 1rem;
+  }
+  .cart-summary p {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  .cart-summary .button-container {
+    justify-content: flex-end;
+  }
+</style>
+
+<section class="cart-section">
+  <h1 class="section-title">Mon panier</h1>
+
+  <% valid_items = @cart.items.select { |item| item.quantity.present? && item.quantity > 0 } %>
+
+  <% if @cart.status == "new" && valid_items.any? %>
+    <div class="cart-grid">
       <% valid_items.each do |item| %>
-        <div style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px;">
+        <div class="cart-card">
           <% if item.product.image_url.present? %>
-            <%= image_tag item.product.image_url, alt: item.product.name, style: "width: 100%; height: auto;" %>
+            <%= image_tag item.product.image_url, alt: item.product.name, class: "cart-image" %>
           <% end %>
 
-          <div>
+          <div class="item-info">
             <h2><%= item.product.name %></h2>
             <p>Quantité : <%= item.quantity %></p>
             <p>Prix unitaire : <%= number_to_currency(item.product.price, unit: "CHF ") %></p>
           </div>
 
-          <div style="display: flex; gap: 0.5rem; margin: 0.5rem 0;">
+          <div class="quantity-controls">
             <% if item.quantity > 1 %>
               <%= form_with model: item, url: item_path(item), method: :patch, local: true do |form| %>
                 <%= form.hidden_field :quantity, value: item.quantity - 1 %>
-                <%= form.submit "-", class: "btn" %>
+                <%= form.submit "-", class: "btn btn-warning" %>
               <% end %>
             <% end %>
 
             <%= form_with model: item, url: item_path(item), method: :patch, local: true do |form| %>
               <%= form.hidden_field :quantity, value: item.quantity + 1 %>
-              <%= form.submit "+", class: "btn" %>
+              <%= form.submit "+", class: "btn btn-warning" %>
             <% end %>
           </div>
 
-          <div>
-            <%= button_to "Supprimer", item_path(item), method: :delete, data: { confirm: "Supprimer cet article ?" }, class: "btn btn-danger" %>
+          <div class="button-container">
+            <%= button_to "Supprimer", item_path(item), method: :delete,
+                          data: { confirm: "Supprimer cet article ?" },
+                          class: "btn btn-danger" %>
           </div>
         </div>
       <% end %>
     </div>
 
-    <div style="margin-top: 2rem;">
-      <p><strong>Total :</strong> <%= number_to_currency(@cart.total_price, unit: "CHF ") %></p>
-      <div style="display: flex; gap: 1rem;">
+    <div class="cart-summary">
+      <p>Total : <%= number_to_currency(@cart.total_price, unit: "CHF") %></p>
+      <div class="button-container">
+
         <%= button_to "Commander",
-            cart_path(@cart),
-            method: :patch,
-            params: { cart: { status: "confirmed" } },
-            data: { confirm: "Confirmer la commande ?" },
-            class: "btn btn-primary"
-        %>
+                      cart_path(@cart), method: :patch,
+                      params: { cart: { status: "confirmed" } },
+                      data: { confirm: "Confirmer la commande ?" },
+                      class: "btn btn-primary" %>
         <%= button_to "Vider le panier",
-            cart_path(@cart),
-            method: :delete,
-            data: { confirm: "Vider le panier ?" },
-            class: "btn btn-warning"
-        %>
+                      cart_path(@cart), method: :delete,
+                      data: { confirm: "Vider le panier ?" },
+                      class: "btn btn-danger" %>
       </div>
     </div>
   <% else %>
-    <p>Votre panier est vide.</p>
+    <p style="text-align: center; color: #555;">Votre panier est vide.</p>
   <% end %>
-<% else %>
-  <p>Votre panier est vide.</p>
-<% end %>
+</section>

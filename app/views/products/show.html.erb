@@ -1,28 +1,154 @@
-<div class="product-show">
-  <div class="product-image-wrapper">
-    <img src="<%= @product.image_url %>" alt="<%= @product.name %>" class="product-image">
-  </div>
+<style>
+  /* Hero wrapper for product detail */
+  .hero {
+    position: relative;
+    width: 100%;
+    padding: 4rem 0 2rem;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e1e3e6 100%);
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.6);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    padding: 2rem;
+  }
 
-  <div class="product-details">
-    <h1 class="product-name"><%= @product.name %></h1>
+  /* Title style */
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    color: #333;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
 
-    <p class="product-seller">Vendeur : <%= @product.user.lastname %> <%= @product.user.firstname %></p>
+  /* Detail layout */
+  .product-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  .product-detail .product-image {
+    flex: 1 1 300px;
+    max-width: 400px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  }
+  .product-detail .product-info {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .product-info h1 {
+    font-size: 2rem;
+    margin: 0;
+    color: #333;
+  }
+  .product-info .text-muted {
+    color: #888;
+    font-size: 0.875rem;
+  }
+  .product-info p {
+    color: #555;
+    margin: 0.5rem 0;
+  }
 
-    <p class="product-description"><%= @product.description %></p>
+  /* Buttons */
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+  }
+  .btn-primary {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+  }
+  .btn-secondary {
+    background: linear-gradient(45deg, #764ba2, #667eea);
+  }
+  .btn-danger {
+    background: linear-gradient(45deg, #e53e3e, #c53030);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+  }
+</style>
 
-    <p class="product-price"><%= number_to_currency(@product.price, unit: "CHF ") %></p>
+<div class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="section-title"><%= @product.name %></h1>
+    <div class="product-detail">
+      <div>
+        <%= image_tag @product.image_url, alt: @product.name, class: "product-image" %>
+      </div>
+      <div class="product-info">
+        <p class="text-muted">Vendeur: <%= @product.user.lastname %> <%= @product.user.firstname %></p>
+        <p><%= @product.description %></p>
+        <p><strong><%= number_to_currency(@product.price) %></strong></p>
 
-    <div class="product-actions">
-      <% if current_user&.buyer? %>
-        <%= button_to "Ajouter au panier", items_path(product_id: @product.id), method: :post, class: "btn-add" %>
-      <% end %>
+        <div class="button-container">
+          <% if current_user&.buyer? %>
+            <%= button_to "Ajouter au panier",
+                          items_path(product_id: @product.id),
+                          method: :post,
+                          class: "btn btn-primary" %>
+          <% end %>
 
-      <% if current_user&.seller? %>
-        <%= link_to "Modifier", edit_product_path(@product), class: "btn-edit" %>
-        <%= link_to "Supprimer", product_path(@product), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn-delete" %>
-      <% end %>
+          <% if current_user&.seller? %>
+            <%= link_to "Modifier",
+                        edit_product_path(@product),
+                        class: "btn btn-secondary" %>
+            <%= button_to "Supprimer",
+                          product_path(@product),
+                          method: :delete,
+                          data: { confirm: "Are you sure?" },
+                          class: "btn btn-danger" %>
+          <% end %>
+        </div>
+
+        <%= link_to "← Retour à la boutique",
+                    products_path,
+                    class: "btn btn-secondary" %>
+      </div>
     </div>
-
-    <%= link_to "← Retour à la boutique", products_path, class: "btn-back" %>
-  </div>
 </div>
