@@ -1,5 +1,4 @@
 // Specific CSS for your home-page
-/* Navbar Styles */
 .navbar {
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
@@ -20,18 +19,18 @@
 
 .navbar a {
   text-decoration: none;
-  color: #4b5563; /* text-gray-600 */
+  color: #4b5563; 
   transition: color 0.2s;
 }
 
 .navbar a:hover {
-  color: #4f46e5; /* text-indigo-600 */
+  color: #4f46e5; 
 }
 
 .navbar .brand {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #1f2937; /* text-gray-800 */
+  color: #1f2937; 
 }
 
 .navbar .brand:hover {
@@ -39,9 +38,9 @@
 }
 
 .navbar .logout-link {
-  color: #dc2626; /* text-red-600 */
+  color: #dc2626; 
 }
 
 .navbar .logout-link:hover {
-  color: #b91c1c; /* text-red-800 */
+  color: #b91c1c; 
 }

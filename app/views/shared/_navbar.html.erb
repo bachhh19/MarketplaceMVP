@@ -45,7 +45,9 @@
 
 <nav class="navbar">
   <div class="navbar-left">
-    <%= link_to "MyApp", root_path, class: "brand" %>
+    
+    <%= link_to "MyDogShop", root_path, class: "brand" %>
+
 
     <% if user_signed_in? && current_user.seller? %>
       <%= link_to "Mes produits", products_path %>
@@ -62,8 +64,10 @@
 
   <div class="navbar-right">
     <% if user_signed_in? %>
-      <span>
-        Connecté en tant que <strong><%= current_user.role.capitalize %></strong>
+
+      <span class="text-gray-500">
+        Connecté en tant que <strong><%= current_user.current_role %></strong>
+
       </span>
       <%= form_with url: destroy_user_session_path, method: :delete, class: "inline" do %>
         <%= submit_tag "Se déconnecter", class: "btn-logout" %>

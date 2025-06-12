@@ -1,4 +1,3 @@
-// Import page-specific CSS files here.
 @import "home";
 
 .products-grid {
@@ -8,6 +7,7 @@
   margin: 0 auto;
   max-width: 1200px;
   padding: 0 20px;
+  padding-bottom: 50px;
 }
 
 .product-card {
@@ -19,8 +19,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%; // important pour uniformité
-  min-height: 380px; // adapte selon tes besoins
+  height: 100%;
+  min-height: 380px;
   justify-content: space-between;
 }
 
@@ -50,7 +50,7 @@
   margin-bottom: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 4.5em; // 3 lignes environ
+  max-height: 4.5em;
   line-height: 1.5em;
 }
 
@@ -73,4 +73,70 @@
 
 .btn-danger {
   background-color: #dc3545;
+}
+
+.navbar-search-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.navbar-search-input {
+  width: 250px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.navbar-search-input:focus {
+  border-color: #007bff;
+}
+
+.navbar-search-form .btn {
+  border-radius: 0 4px 4px 0;
+  padding: 6px 15px;
+  font-size: 14px;
+}
+
+.sticky-pagination {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid #ddd;
+  padding: 2px 0;
+  text-align: center;
+  z-index: 1000;
+  box-shadow: 0 -1px 4px rgba(0,0,0,0.05);
+  font-size: 14px;
+}
+
+.pagination a, .pagination span {
+  color: #007bff;
+  float: left;
+  padding: 6px 12px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  margin-left: -1px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pagination a:hover {
+  background-color: #e9ecef;
+}
+
+.pagination .current {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  cursor: default;
+}
+
+.pagination {
+  display: inline-block;
 }

@@ -27,46 +27,26 @@
     box-shadow: 0 6px 8px rgba(0,0,0,0.15);
   }
 
-  /* ====== Titre de section ====== */
-  .section-title {
-    display: block;
-    font-size: 4rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 0;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
-    display: inline-block;
-  }
-  .section-title::after {
-    content: "";
-    display: block;
-    width: 80px;
-    height: 5px;
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    margin: 1rem auto 0;
-    border-radius: 2px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
+<div class="navbar-center">
+  <% if user_signed_in? %>
+    <%= form_with url: products_path, method: :get, local: true, class: "navbar-search-form" do |form| %>
+      <%= form.text_field :query, value: params[:query], placeholder: "Rechercher un produit...", class: "navbar-search-input" %>
+      <%= form.submit "Rechercher", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+</div>
 
-  /* ====== Grille produits ====== */
-  .products-grid {
-    display: grid;
-    gap: 2rem;
-    margin: 0 1rem;
-    grid-template-columns: repeat(1, 1fr);
-  }
-  @media (min-width: 576px) {
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 768px) {
-    .products-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (min-width: 1200px) {
-    .products-grid { grid-template-columns: repeat(3, 1fr); }
-  }
+<div class="products-grid">
+  <% @products.each do |product| %>
+    <div class="product-card">
+      <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image">
+
+      <div class="product-info">
+        <h2><%= link_to product.name, product_path(product) %></h2>
+        <p><%= truncate(product.description, length: 100) %></p>
+        <p><strong><%= number_to_currency(product.price, unit: "CHF ") %></strong></p>
+        <p class="text-muted">Vendeur: <%= product.user.lastname %> <%= product.user.firstname %></p>
+
 
   .product-card {
     background: #fff;
@@ -145,25 +125,14 @@
     <h1 class="section-title">Listing</h1>
   </div>
 
-  <div class="products-grid">
-    <% @products.each do |product| %>
-      <div class="product-card">
-        <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image">
-        <div class="product-info">
-          <h2><%= link_to product.name, product_path(product) %></h2>
-          <p><%= truncate(product.description, length: 100) %></p>
-          <p><strong><%= number_to_currency(product.price) %></strong></p>
-          <p class="text-muted">Vendeur: <%= product.user.lastname %> <%= product.user.firstname %></p>
-          <div class="button-container">
-            <% if current_user&.buyer? %>
-              <%= button_to "Ajouter au panier", items_path(product_id: product.id), method: :post, class: "btn btn-primary" %>
-            <% end %>
-            <% if current_user&.seller? %>
-              <%= link_to "Voir plus", product_path(product), class: "btn btn-secondary" %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    <% end %>
+
+<div class="pagination sticky-pagination">
+  <%= paginate @products, params: { query: params[:query] } %>
+</div>
+
+<% if current_user&.seller? %>
+  <div style="text-align: center; margin-top: 30px;">
+    <%= link_to "Créer un produit", new_product_path, class: "btn btn-primary" %>
+
   </div>
 </section>
