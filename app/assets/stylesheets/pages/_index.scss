@@ -150,13 +150,13 @@
 .navbar-search-form {
   display: flex;
   justify-content: center;
-  margin: 0 auto 20px; /* centrage horizontal + margin-bottom */
-  max-width: 400px; /* limite la largeur max pour que ça reste joli */
+  margin: 0 auto 20px;
+  max-width: 400px;
   width: 100%;
 }
 
 .navbar-search-input {
-  flex: 1; /* pour que le champ prenne tout l’espace possible */
+  flex: 1;
   padding: 6px 10px;
   border: 1px solid #ccc;
   border-radius: 4px 0 0 4px;
@@ -180,42 +180,63 @@
 .sticky-pagination {
   position: sticky;
   top: 1rem;
-  right: 1rem;
-  margin-left: auto;
-  max-width: 300px;
+  margin: 0 auto;
+  max-width: fit-content;
   padding: 1rem;
-  text-align: right;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 10;
-  align-self: flex-start;
+  text-align: center;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: -webkit-sticky; /* Pour compatibilité Safari */
+}
+
+/* Ajout du dégradé autour via un pseudo-élément */
+.sticky-pagination::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: 12px;
+  pointer-events: none;
 }
 
 .pagination {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .pagination a,
 .pagination span {
-  color: #007bff;
-  float: left;
+  color: #764ba2;
   padding: 6px 12px;
   text-decoration: none;
-  border: 1px solid #ddd;
-  margin-left: -1px;
+  border: 1px solid #764ba2;
   cursor: pointer;
   user-select: none;
+  border-radius: 4px;
+  background-color: #fff;
+  transition: all 0.2s ease-in-out;
 }
 
 .pagination a:hover {
-  background-color: #e9ecef;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: #fff;
+  border-color: transparent;
 }
 
 .pagination .current {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: #fff;
+  border-color: transparent;
   cursor: default;
 }
 
