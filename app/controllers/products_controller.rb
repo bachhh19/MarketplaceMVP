@@ -7,8 +7,14 @@ class ProductsController < ApplicationController
     if current_user&.seller?
       @products = Product.where(user_id: current_user.id)
     else
-      @products = Product.all
+      @products = Product.order(Arel.sql('RANDOM()'))
     end
+
+    if params[:query].present?
+      @products = @products.where("name ILIKE ?", "%#{params[:query]}%")
+    end
+
+    @products = @products.page(params[:page]).per(12)
   end
 
   def show

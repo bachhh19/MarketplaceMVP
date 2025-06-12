@@ -52,6 +52,7 @@ gem "sassc-rails"
 gem "devise"
 gem "cssbundling-rails"
 gem 'faker'
+gem 'kaminari'
 
 group :development, :test do
   gem "dotenv-rails"
