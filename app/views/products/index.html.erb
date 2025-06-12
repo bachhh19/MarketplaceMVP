@@ -1,5 +1,14 @@
 <h1 style="text-align: center; margin-bottom: 30px;">Nos produits</h1>
 
+<div class="navbar-center">
+  <% if user_signed_in? %>
+    <%= form_with url: products_path, method: :get, local: true, class: "navbar-search-form" do |form| %>
+      <%= form.text_field :query, value: params[:query], placeholder: "Rechercher un produit...", class: "navbar-search-input" %>
+      <%= form.submit "Rechercher", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+</div>
+
 <div class="products-grid">
   <% @products.each do |product| %>
     <div class="product-card">
@@ -21,6 +30,10 @@
       </div>
     </div>
   <% end %>
+</div>
+
+<div class="pagination sticky-pagination">
+  <%= paginate @products, params: { query: params[:query] } %>
 </div>
 
 <% if current_user&.seller? %>
