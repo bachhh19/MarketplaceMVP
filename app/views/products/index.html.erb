@@ -1,30 +1,169 @@
-<h1 style="text-align: center; margin-bottom: 30px;">Nos produits</h1>
+<style>
+  /* ====== Header with button and title ====== */
+  .section-header {
+    position: relative;
+    margin: 3rem 0 2rem; /* Espace ajouté en haut pour s'éloigner de la navbar */
+    width: 100%;
+    text-align: center;
+  }
+  .btn-create {
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 140px;
+    text-align: center;
+    border: none;
+    color: #fff;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+  }
+  .btn-create:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+  }
 
-<div class="products-grid">
-  <% @products.each do |product| %>
-    <div class="product-card">
-      <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image">
+  /* ====== Titre de section ====== */
+  .section-title {
+    display: block;
+    font-size: 4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 5px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    margin: 1rem auto 0;
+    border-radius: 2px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
 
-      <div class="product-info">
-        <h2><%= link_to product.name, product_path(product) %></h2>
-        <p><%= truncate(product.description, length: 100) %></p>
-        <p><strong><%= number_to_currency(product.price) %></strong></p>
-        <p class="text-muted">Vendeur: <%= product.user.lastname %> <%= product.user.firstname %></p>
+  /* ====== Grille produits ====== */
+  .products-grid {
+    display: grid;
+    gap: 2rem;
+    margin: 0 1rem;
+    grid-template-columns: repeat(1, 1fr);
+  }
+  @media (min-width: 576px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 768px) {
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1200px) {
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+  }
 
-        <% if current_user&.buyer? %>
-          <%= button_to "Ajouter au panier", items_path(product_id: product.id), method: :post, class: "btn" %>
-        <% end %>
+  .product-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .product-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+  .product-info {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-info h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: #333;
+  }
+  .product-info p {
+    margin-bottom: 0.75rem;
+    color: #555;
+  }
+  .product-info p.text-muted {
+    color: #888;
+    font-size: 0.875rem;
+    margin-top: auto;
+  }
 
-        <% if current_user&.seller? %>
-          <%= link_to "Voir plus", product_path(product), class: "btn btn-secondary" %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-</div>
+  /* ====== Boutons produit ====== */
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .btn-primary {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+  }
+  .btn-secondary {
+    background: linear-gradient(45deg, #764ba2, #667eea);
+  }
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 140px;
+    text-align: center;
+    border: none;
+    color: #fff;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+  }
+</style>
 
-<% if current_user&.seller? %>
-  <div style="text-align: center; margin-top: 30px;">
-    <%= link_to "Créer un produit", new_product_path, class: "btn btn-primary" %>
+<section class="products-section">
+  <div class="section-header">
+    <% if current_user&.seller? %>
+      <%= link_to " ⊕ ajouter un article", new_product_path, class: "btn btn-primary btn-create" %>
+    <% end %>
+    <h1 class="section-title">Listing</h1>
   </div>
-<% end %>
+
+  <div class="products-grid">
+    <% @products.each do |product| %>
+      <div class="product-card">
+        <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image">
+        <div class="product-info">
+          <h2><%= link_to product.name, product_path(product) %></h2>
+          <p><%= truncate(product.description, length: 100) %></p>
+          <p><strong><%= number_to_currency(product.price) %></strong></p>
+          <p class="text-muted">Vendeur: <%= product.user.lastname %> <%= product.user.firstname %></p>
+          <div class="button-container">
+            <% if current_user&.buyer? %>
+              <%= button_to "Ajouter au panier", items_path(product_id: product.id), method: :post, class: "btn btn-primary" %>
+            <% end %>
+            <% if current_user&.seller? %>
+              <%= link_to "Voir plus", product_path(product), class: "btn btn-secondary" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
