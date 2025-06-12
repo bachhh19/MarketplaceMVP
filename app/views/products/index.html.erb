@@ -1,31 +1,4 @@
-<style>
-  /* ====== Header with button and title ====== */
-  .section-header {
-    position: relative;
-    margin: 3rem 0 2rem; /* Espace ajouté en haut pour s'éloigner de la navbar */
-    width: 100%;
-    text-align: center;
-  }
-  .btn-create {
-    position: absolute;
-    top: 0;
-    left: 1rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 50px;
-    font-weight: 600;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    min-width: 140px;
-    text-align: center;
-    border: none;
-    color: #fff;
-    background: linear-gradient(45deg, #667eea, #764ba2);
-  }
-  .btn-create:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-  }
+<h1 style="text-align: center; margin-bottom: 30px;">Nos produits</h1>
 
 <div class="navbar-center">
   <% if user_signed_in? %>
@@ -42,89 +15,22 @@
       <img src="<%= product.image_url %>" alt="<%= product.name %>" class="product-image">
 
       <div class="product-info">
-        <h2><%= link_to product.name, product_path(product) %></h2>
+        <h3><%= link_to product.name, product_path(product) %></h3>
         <p><%= truncate(product.description, length: 100) %></p>
         <p><strong><%= number_to_currency(product.price, unit: "CHF ") %></strong></p>
         <p class="text-muted">Vendeur: <%= product.user.lastname %> <%= product.user.firstname %></p>
 
+        <% if current_user&.buyer? %>
+          <%= button_to "Ajouter au panier", items_path(product_id: product.id), method: :post, class: "btn" %>
+        <% end %>
 
-  .product-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-width: 360px;
-    margin: 0 auto;
-  }
-  .product-image {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-  }
-  .product-info {
-    padding: 1rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .product-info h2 {
-    font-size: 1.75rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-    color: #333;
-  }
-  .product-info p {
-    margin-bottom: 0.75rem;
-    color: #555;
-  }
-  .product-info p.text-muted {
-    color: #888;
-    font-size: 0.875rem;
-    margin-top: auto;
-  }
-
-  /* ====== Boutons produit ====== */
-  .button-container {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-  }
-  .btn-primary {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-  }
-  .btn-secondary {
-    background: linear-gradient(45deg, #764ba2, #667eea);
-  }
-  .btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 50px;
-    font-weight: 600;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    min-width: 140px;
-    text-align: center;
-    border: none;
-    color: #fff;
-  }
-  .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-  }
-</style>
-
-<section class="products-section">
-  <div class="section-header">
-    <% if current_user&.seller? %>
-      <%= link_to " ⊕ ajouter un article", new_product_path, class: "btn btn-primary btn-create" %>
-    <% end %>
-    <h1 class="section-title">Listing</h1>
-  </div>
-
+        <% if current_user&.seller? %>
+          <%= link_to "Voir plus", product_path(product), class: "btn btn-secondary" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 <div class="pagination sticky-pagination">
   <%= paginate @products, params: { query: params[:query] } %>
@@ -133,6 +39,5 @@
 <% if current_user&.seller? %>
   <div style="text-align: center; margin-top: 30px;">
     <%= link_to "Créer un produit", new_product_path, class: "btn btn-primary" %>
-
   </div>
-</section>
+<% end %>
