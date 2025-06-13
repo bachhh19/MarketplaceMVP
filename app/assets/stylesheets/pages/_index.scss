@@ -190,10 +190,8 @@
   text-align: center;
   border: 2px solid transparent;
   background-clip: padding-box;
-  position: -webkit-sticky; /* Pour compatibilité Safari */
 }
 
-/* Ajout du dégradé autour via un pseudo-élément */
 .sticky-pagination::before {
   content: "";
   position: absolute;

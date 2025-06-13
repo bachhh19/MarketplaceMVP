@@ -1,96 +1,4 @@
-<style>
-  .hero {
-    position: relative;
-    width: 100%;
-    padding: 4rem 0 2rem;
-    background: linear-gradient(135deg, #f3f4f6 0%, #e1e3e6 100%);
-    display: flex;
-    align-items: start;
-    justify-content: center;
-    text-align: center;
-    color: #333;
-    overflow: auto;
-  }
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.6);
-    z-index: 1;
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 700px;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  }
-  .hero-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-  }
-  .hero-content p {
-    font-size: 1.125rem;
-    margin-bottom: 1.5rem;
-  }
-  .form-inputs {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  .form-inputs .form-control {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-  }
-  .button-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  .btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 50px;
-    font-weight: 600;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    min-width: 140px;
-    text-align: center;
-    border: none;
-    color: #fff;
-  }
-  .btn-primary {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-  }
-  .btn-secondary {
-    background: linear-gradient(45deg, #764ba2, #667eea);
-  }
-  .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-  }
-  @media (max-width: 576px) {
-    .form-inputs {
-      grid-template-columns: 1fr;
-    }
-    .btn {
-      flex: 1 1 100%;
-    }
-  }
-</style>
-
 <div class="hero">
-  <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1>Connexion</h1>
     <p>Veuillez vous connecter pour accéder à votre compte.</p>
@@ -111,7 +19,6 @@
       </div>
       <div class="button-container">
         <%= f.button :submit, "Se connecter", class: "btn btn-primary btn-lg" %>
-        <%= link_to "S’inscrire", new_user_registration_path, class: "btn btn-secondary btn-lg" %>
       </div>
     <% end %>
   </div>
